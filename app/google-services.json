@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1068059746545",
+    "project_id": "chatapp-db98a",
+    "storage_bucket": "chatapp-db98a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1068059746545:android:13d0e3f080f3f1292cc950",
+        "android_client_info": {
+          "package_name": "com.example.coolchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1068059746545-nesn7ne7ml98tmthbm3k497pbl32ctt1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.coolchat",
+            "certificate_hash": "fbd381e0cbbbf1083d388bbc708b092bedd6297d"
+          }
+        },
+        {
+          "client_id": "1068059746545-j414jj5eapveoik5jgbrk3sjqf5un3p9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZXqNHiysryoldfxeZMWml3E9-khLzshc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1068059746545-j414jj5eapveoik5jgbrk3sjqf5un3p9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

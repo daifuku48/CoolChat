@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_marginTop="20dp"
+    android:orientation="vertical"
+    android:layout_height="wrap_content"
+    android:background = "@color/white_200">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id = "@+id/photoImageView"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id ="@+id/nameTextView"
+        android:layout_width = "match_parent"
+        android:textSize = "14sp"
+        android:text = "name"
+        android:layout_height = "wrap_content"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id ="@+id/textTextView"
+        android:layout_width = "match_parent"
+        android:text = "text"
+        android:textSize = "20sp"
+        android:layout_height = "wrap_content"/>
+
+</LinearLayout>
