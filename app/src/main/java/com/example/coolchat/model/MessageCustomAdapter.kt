@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.coolchat.R
 
-class MessageCustomAdapter(private val context: Activity, private val description: Array<String>, private val listOfMessage: List<Message>)
+class MessageCustomAdapter(private val context: Activity, private val resource: Int, private val listOfMessage: List<Message>)
     : ArrayAdapter<Message>(context, R.layout.item_message) {
 
 
