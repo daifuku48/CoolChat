@@ -22,8 +22,12 @@ class MessageCustomAdapter(private val context: Activity, private val descriptio
 
         textOfMessage.text = listOfMessage[position].text
         nameTextViewOfMessage.text = listOfMessage[position].name
-        imageViewOfMessage.(listOfMessage[position].imageUrl)
+        imageViewOfMessage.setImageResource(listOfMessage[position].imageUrl)
 
+        if (listOfMessage[position].text != "")
+        {
+            imageViewOfMessage.visibility = View.INVISIBLE
+        }
         return super.getView(position, convertView, parent)
     }
 }
