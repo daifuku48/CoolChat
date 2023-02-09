@@ -1,5 +1,6 @@
 package com.example.coolchat.model
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.View
 import android.view.ViewGroup
@@ -8,26 +9,31 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.coolchat.R
 
-class MessageCustomAdapter(private val context: Activity, private val resource: Int, private val listOfMessage: List<Message>)
-    : ArrayAdapter<Message>(context, R.layout.item_message) {
+class MessageCustomAdapter(private val context: Activity, private val resource: Int, private val listOfMessage: List<Message?>)
+    : ArrayAdapter<Message>(context, R.layout.item_message, listOfMessage) {
 
-
+    @SuppressLint("ViewHolder")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
-        val view = context.layoutInflater.inflate(R.layout.item_message, parent, false)
+        val view = context.layoutInflater.inflate(resource, parent, false)
 
-        val textOfMessage = view.findViewById<TextView>(R.id.nameTextView)
-        val nameTextViewOfMessage = view.findViewById<TextView>(R.id.nameTextView)
-        val imageViewOfMessage = view.findViewById<ImageView>(R.id.photoImageView)
+        val textOfMessage = view.findViewById<TextView?>(R.id.nameTextView)
+        val nameTextViewOfMessage = view.findViewById<TextView?>(R.id.textTextView)
+        val imageViewOfMessage = view.findViewById<ImageView?>(R.id.photoImageView)
 
-        textOfMessage.text = listOfMessage[position].text
-        nameTextViewOfMessage.text = listOfMessage[position].name
-        imageViewOfMessage.setImageResource(listOfMessage[position].imageUrl)
 
-        if (listOfMessage[position].text != "")
+        if (listOfMessage.count() != 0)
         {
-            imageViewOfMessage.visibility = View.INVISIBLE
+            textOfMessage.text = listOfMessage[position]?.text
+            nameTextViewOfMessage.text = listOfMessage[position]?.name
+            imageViewOfMessage.setImageResource(listOfMessage[position]?.imageUrl!!)
+            if (listOfMessage[position]?.text != "")
+            {
+                imageViewOfMessage.visibility = View.INVISIBLE
+            }
         }
-        return super.getView(position, convertView, parent)
+
+
+        return view
     }
 }

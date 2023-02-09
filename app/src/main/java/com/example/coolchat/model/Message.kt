@@ -1,5 +1,5 @@
 package com.example.coolchat.model
 
-class Message(val text: String, val name: String, val imageUrl: Int) {
+class Message(var text: String, var name: String, var imageUrl: Int) {
     constructor() : this("", "", 0)
 }
