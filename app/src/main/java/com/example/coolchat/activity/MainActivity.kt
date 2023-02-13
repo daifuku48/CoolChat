@@ -19,7 +19,7 @@ import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivityMainBinding
+    var binding: ActivityMainBinding? = null
     lateinit var adapter: MessageCustomAdapter
     lateinit var database: Firebase
     lateinit var messagesDatabaseReference: DatabaseReference
@@ -28,41 +28,41 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(binding?.root)
         val database = Firebase.database
         val messagesDatabaseReference = database.getReference("messages")
-        binding.progressBarOfSending.visibility = View.INVISIBLE
+        binding?.progressBarOfSending?.visibility = View.INVISIBLE
         val listOfMessage = ArrayList<Message>()
         adapter = MessageCustomAdapter(this, R.layout.item_message, listOfMessage)
-        binding.messageListView.adapter = adapter
-        binding.messageButton.isEnabled = false
-        binding.textOfMessageEditText.addTextChangedListener(object : TextWatcher{
+        binding?.messageListView?.adapter = adapter
+        binding?.messageButton?.isEnabled = false
+        binding?.textOfMessageEditText?.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                binding.messageButton.isEnabled = p0.toString().trim().isNotEmpty()
+                binding?.messageButton?.isEnabled = p0.toString().trim().isNotEmpty()
             }
             override fun afterTextChanged(p0: Editable?) {
 
             }
         })
 
-        binding.textOfMessageEditText.filters = arrayOf<InputFilter>(
+        binding?.textOfMessageEditText?.filters = arrayOf<InputFilter>(
             InputFilter.LengthFilter(
                 1000
             )
         )
 
-        binding.messageButton.setOnClickListener {
-            val text = binding.textOfMessageEditText.text.toString()
+        binding?.messageButton?.setOnClickListener {
+            val text = binding?.textOfMessageEditText?.text.toString()
             val message = Message(text, username, 0)
             messagesDatabaseReference.push().setValue(message)
-            binding.textOfMessageEditText.text?.clear()
+            binding?.textOfMessageEditText?.text?.clear()
         }
 
-        binding.sendPhotoButton.setOnClickListener{
+        binding?.sendPhotoButton?.setOnClickListener{
 
         }
 
@@ -91,5 +91,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         messagesDatabaseReference.addChildEventListener(messageChildEventListener)
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 }
