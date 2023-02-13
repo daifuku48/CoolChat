@@ -26,6 +26,21 @@ class SignTabFragment : Fragment() {
         auth = Firebase.auth
         binding?.loginOrSignButton?.setOnClickListener{
             //sing in in sign in fragment
+            auth.signInWithEmailAndPassword(binding?.emailEditText?.text.toString(), binding?.passwordEditText?.text.toString())
+                .addOnCompleteListener(requireActivity()) { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d("Sign in", "signInWithEmail:success")
+                        val user = auth.currentUser
+                        //updateUI(user)
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w("Sign in", "signInWithEmail:failure", task.exception)
+                        Toast.makeText(activity?.baseContext, "Authentication failed.",
+                            Toast.LENGTH_SHORT).show()
+                        //updateUI(null)
+                    }
+                }
 
         }
 
