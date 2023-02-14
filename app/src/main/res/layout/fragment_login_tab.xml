@@ -1,43 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.LogTabFragment"
+    tools:context=".activity.LoginTabFragment"
+    android:orientation="vertical"
     android:focusableInTouchMode="false"
     android:isScrollContainer="false">
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/loginTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="30dp"
-            android:text="Log in"
-            android:textSize="18sp"/>
-
-        <TextView
-            android:id="@+id/nameTextView"
-            android:layout_marginStart="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Name"/>
-
-        <EditText
-            android:id="@+id/nameEditText"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:hint="Your name"/>
-
-        <TextView
+            android:layout_marginTop="60dp"
             android:id="@+id/emailTextView"
             android:layout_marginStart="20dp"
             android:layout_width="match_parent"
@@ -76,6 +48,5 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text = "Log in"/>
-    </LinearLayout>
-</FrameLayout>
+            android:text =  "Log in"/>
+</LinearLayout>

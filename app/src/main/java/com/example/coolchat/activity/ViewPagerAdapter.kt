@@ -13,8 +13,8 @@ class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
 
     override fun createFragment(position: Int): Fragment {
         return if (position == 1) {
-            SignTabFragment()
-        } else LogTabFragment()
+            LoginTabFragment()
+        } else SignInTabFragment()
     }
 
 }

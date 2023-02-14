@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:showIn = "navigation_view"
+    android:backgroundTint = "@color/green_100">
+    <group
+        android:checkableBehavior="single">
+        <item android:title="@string/log_out"
+            android:icon="@drawable/logout_svgrepo_com"
+            android:iconTint="@color/green_200"
+            android:id="@+id/menu_log_out"/>
+    </group>
+</menu>
