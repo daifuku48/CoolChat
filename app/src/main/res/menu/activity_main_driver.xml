@@ -7,7 +7,6 @@
     <group
         android:checkableBehavior="single">
         <item android:title="@string/log_out"
-            android:icon="@drawable/logout_svgrepo_com"
             android:iconTint="@color/green_200"
             android:id="@+id/menu_log_out"/>
     </group>

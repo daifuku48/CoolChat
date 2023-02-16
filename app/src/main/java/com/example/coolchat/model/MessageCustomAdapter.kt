@@ -22,7 +22,7 @@ class MessageCustomAdapter(private val context: Activity, private val resource: 
         val imageViewOfMessage = view.findViewById<ImageView?>(R.id.photoImageView)
 
 
-        if (listOfMessage.count() != 0)
+        if (listOfMessage.isNotEmpty())
         {
             textOfMessage.text = listOfMessage[position]?.text
             nameTextViewOfMessage.text = listOfMessage[position]?.name
