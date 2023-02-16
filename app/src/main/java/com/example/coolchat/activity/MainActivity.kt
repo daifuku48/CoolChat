@@ -6,6 +6,7 @@ import android.text.Editable
 import android.text.InputFilter
 import android.text.TextWatcher
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -27,7 +28,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(){
     private lateinit var auth: FirebaseAuth
     var binding: ActivityMainBinding? = null
     lateinit var adapter: MessageCustomAdapter
@@ -40,7 +41,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
-        setSupportActionBar(binding?.toolbar)
 
         val auth = Firebase.auth
         val database = Firebase.database
@@ -63,17 +63,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         })
 
-        binding?.navView?.setNavigationItemSelectedListener(this)
-
-        //init toolbar
-        val toggle = ActionBarDrawerToggle(
-            this, binding?.drawerLayout, binding?.toolbar, R.string.open_nav,
-            R.string.close_nav
-        )
-        binding?.drawerLayout?.addDrawerListener(toggle)
-        toggle.syncState()
-
-
         binding?.textOfMessageEditText?.filters = arrayOf<InputFilter>(
             InputFilter.LengthFilter(
                 1000
@@ -90,9 +79,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding?.sendPhotoButton?.setOnClickListener{
 
         }
-        if (savedInstanceState == null) {
-            binding?.navView?.setCheckedItem(R.id.menu_log_out)
-        }
+
 
         messageChildEventListener = object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
@@ -126,19 +113,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding = null
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.activity_main_driver, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId)
         {
             R.id.menu_log_out -> {
                 Log.d("log out", "user is out")
                 auth.signOut()
-                binding?.drawerLayout?.closeDrawer(GravityCompat.START)
                 val intent = Intent(this, Login::class.java)
                 startActivity(intent)
                 return true
             }
         }
-        return true
+        return super.onOptionsItemSelected(item)
     }
+
 }
