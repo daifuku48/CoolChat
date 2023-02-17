@@ -17,6 +17,7 @@ import com.example.coolchat.R
 import com.example.coolchat.databinding.ActivityMainBinding
 import com.example.coolchat.model.Message
 import com.example.coolchat.model.MessageCustomAdapter
+import com.example.coolchat.model.User
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -24,6 +25,7 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
@@ -32,19 +34,24 @@ class MainActivity : AppCompatActivity(){
     private lateinit var auth: FirebaseAuth
     var binding: ActivityMainBinding? = null
     lateinit var adapter: MessageCustomAdapter
-    lateinit var database: Firebase
+    lateinit var database: FirebaseDatabase
 
     lateinit var messagesDatabaseReference: DatabaseReference
     lateinit var messageChildEventListener: ChildEventListener
-    val username = "user"
+    lateinit var usersDatabaseReference: DatabaseReference
+    lateinit var usersChildEventListener: ChildEventListener
+    private var username: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
+        val intent : Intent? = intent
+        username = intent?.getStringExtra("userName")
 
-        val auth = Firebase.auth
-        val database = Firebase.database
-        val messagesDatabaseReference = database.getReference("messages")
+        auth = Firebase.auth
+        database = Firebase.database
+        messagesDatabaseReference = database.getReference("messages")
+        usersDatabaseReference = database.getReference("users")
         binding?.progressBarOfSending?.visibility = View.INVISIBLE
         val listOfMessage = ArrayList<Message>()
         adapter = MessageCustomAdapter(this, R.layout.item_message, listOfMessage)
@@ -103,6 +110,31 @@ class MainActivity : AppCompatActivity(){
 
             }
         }
+
+        usersChildEventListener = object : ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?){
+                val user = snapshot.getValue(User::class.java)
+
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        }
+
 
         messagesDatabaseReference.addChildEventListener(messageChildEventListener)
     }

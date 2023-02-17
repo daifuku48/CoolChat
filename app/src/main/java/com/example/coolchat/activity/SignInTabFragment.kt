@@ -11,15 +11,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.coolchat.databinding.FragmentSignUpTabBinding
+import com.example.coolchat.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class SignInTabFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth //variable for authorization
     var binding: FragmentSignUpTabBinding? = null
+    lateinit var usersDatabaseReference: DatabaseReference
+    lateinit var usersChildEventListener: ChildEventListener
+    lateinit var database: FirebaseDatabase
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -31,6 +39,9 @@ class SignInTabFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentSignUpTabBinding.inflate(layoutInflater)
         auth = Firebase.auth
+        database = Firebase.database
+        usersDatabaseReference = database.getReference("users")
+
         binding?.loginOrSignButton?.setOnClickListener{
             //authorization in sign in fragment
             Log.d("d", "button is clicked")
@@ -53,6 +64,29 @@ class SignInTabFragment : Fragment() {
                 }
         }
 
+        usersChildEventListener = object : ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?){
+                val user = snapshot.getValue(User::class.java)
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        }
+
         binding?.emailEditText?.filters = arrayOf<InputFilter>(
             LengthFilter(80)
         )
@@ -73,9 +107,21 @@ class SignInTabFragment : Fragment() {
     }
 
     private fun updateUI(user : FirebaseUser?){
+        createUser(user)
         val intentToMainActivity = Intent(requireContext(), MainActivity::class.java)
+        intentToMainActivity.apply {
+            putExtra("userName", binding?.nameEditText?.text.toString())
+        }
         startActivity(intentToMainActivity)
     }
+
+    private fun createUser(user : FirebaseUser?)
+    {
+        val userCreate = User(binding?.nameEditText?.text.toString(), user?.email.toString(), user?.uid.toString())
+        usersDatabaseReference.push().setValue(userCreate)
+    }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
