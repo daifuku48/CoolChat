@@ -12,9 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CoolChat">
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.ChattingActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustNothing"/>
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".activity.Login"
             android:exported="true"

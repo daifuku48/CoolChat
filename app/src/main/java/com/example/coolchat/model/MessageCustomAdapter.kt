@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.example.coolchat.R
 
 class MessageCustomAdapter(private val context: Activity, private val resource: Int, private val listOfMessage: List<Message?>)
@@ -26,10 +27,12 @@ class MessageCustomAdapter(private val context: Activity, private val resource: 
         {
             textOfMessage.text = listOfMessage[position]?.text
             nameTextViewOfMessage.text = listOfMessage[position]?.name
-            imageViewOfMessage.setImageResource(listOfMessage[position]?.imageUrl!!)
-            if (listOfMessage[position]?.text != "")
+            Glide.with(imageViewOfMessage.context)
+                .load(listOfMessage[position]?.imageUri)
+                .into(imageViewOfMessage)
+            if (listOfMessage[position]?.imageUri != "")
             {
-                imageViewOfMessage.visibility = View.INVISIBLE
+                textOfMessage.visibility = View.INVISIBLE
             }
         }
 

@@ -108,7 +108,7 @@ class SignInTabFragment : Fragment() {
 
     private fun updateUI(user : FirebaseUser?){
         createUser(user)
-        val intentToMainActivity = Intent(requireContext(), MainActivity::class.java)
+        val intentToMainActivity = Intent(requireContext(), ChattingActivity::class.java)
         intentToMainActivity.apply {
             putExtra("userName", binding?.nameEditText?.text.toString())
         }

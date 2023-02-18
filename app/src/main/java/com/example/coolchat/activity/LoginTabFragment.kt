@@ -73,7 +73,7 @@ class LoginTabFragment : Fragment() {
 
     private fun updateUI(user: FirebaseUser?)
     {
-        val intentToMainActivity = Intent(requireContext(), MainActivity::class.java)
+        val intentToMainActivity = Intent(requireContext(), ChattingActivity::class.java)
         startActivity(intentToMainActivity)
     }
 
