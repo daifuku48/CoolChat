@@ -1,5 +1,8 @@
 package com.example.coolchat.model
 
-class User(val name: String?, val email: String, val id: String?){
-    constructor() : this("", "","")
+import android.widget.ImageView
+import com.example.coolchat.R
+
+class User(var name: String?, var email: String, var id: String?, var icon: Int){
+    constructor() : this("", "","", R.drawable.zoro)
 }

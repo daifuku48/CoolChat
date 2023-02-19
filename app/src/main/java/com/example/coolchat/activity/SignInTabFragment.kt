@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.example.coolchat.R
 import com.example.coolchat.databinding.FragmentSignUpTabBinding
 import com.example.coolchat.model.User
 import com.google.firebase.auth.FirebaseAuth
@@ -108,7 +109,7 @@ class SignInTabFragment : Fragment() {
 
     private fun updateUI(user : FirebaseUser?){
         createUser(user)
-        val intentToMainActivity = Intent(requireContext(), ChattingActivity::class.java)
+        val intentToMainActivity = Intent(requireContext(), UserListActivity::class.java)
         intentToMainActivity.apply {
             putExtra("userName", binding?.nameEditText?.text.toString())
         }
@@ -117,7 +118,7 @@ class SignInTabFragment : Fragment() {
 
     private fun createUser(user : FirebaseUser?)
     {
-        val userCreate = User(binding?.nameEditText?.text.toString(), user?.email.toString(), user?.uid.toString())
+        val userCreate = User(binding?.nameEditText?.text.toString(), user?.email.toString(), user?.uid.toString(), R.drawable.zoro)
         usersDatabaseReference.push().setValue(userCreate)
     }
 

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CoolChat">
         <activity
-            android:name=".user_list_activity"
+            android:name=".activity.UserListActivity"
             android:exported="false" />
         <activity
             android:name=".activity.ChattingActivity"
