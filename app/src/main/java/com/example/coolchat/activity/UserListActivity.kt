@@ -1,10 +1,15 @@
 package com.example.coolchat.activity
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.coolchat.R
 import com.example.coolchat.databinding.ActivityUserListBinding
 import com.example.coolchat.model.User
 import com.example.coolchat.model.UserRecyclerAdapter
@@ -35,9 +40,7 @@ class UserListActivity : AppCompatActivity() {
         auth = Firebase.auth
     }
 
-
-    private fun buildRecyclerView()
-    {
+    private fun buildRecyclerView() {
         val userLayoutManager = LinearLayoutManager(this)
         binding?.userListRecyclerView?.layoutManager = userLayoutManager
         usersArrayList = ArrayList()
@@ -51,7 +54,10 @@ class UserListActivity : AppCompatActivity() {
         )
         usersAdapter.setOnItemClickListener(object : UserRecyclerAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-
+                val intent = Intent(this@UserListActivity, ChattingActivity::class.java).apply {
+                    putExtra("name", usersAdapter.getItemId(position) )
+                }
+                startActivity(intent)
             }
         })
 
@@ -59,16 +65,19 @@ class UserListActivity : AppCompatActivity() {
     }
 
     private fun initializeFirebaseDatabase(){
+
         database = Firebase.database
         usersDataBaseReference = FirebaseDatabase.getInstance().reference.child("users")
         usersChildEventListener = object: ChildEventListener{
+
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val user = snapshot.getValue(User::class.java)
-                Toast.makeText(applicationContext,"there is a obj" + user?.name, Toast.LENGTH_LONG).show()
 
                 if (user != null) {
-                    usersArrayList.add(user)
-                    usersAdapter.notifyItemInserted(usersArrayList.size-1)
+                    if (user.id != auth.currentUser?.uid){
+                        usersArrayList.add(user)
+                        usersAdapter.notifyItemInserted(usersArrayList.size-1)
+                    }
                 }
             }
 
@@ -91,7 +100,26 @@ class UserListActivity : AppCompatActivity() {
         }
         usersDataBaseReference.addChildEventListener(usersChildEventListener)
 
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.activity_main_driver, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId)
+        {
+            R.id.menu_log_out -> {
+                Log.d("log out", "user is out")
+                auth.signOut()
+                val intent = Intent(this, Login::class.java)
+                startActivity(intent)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroy() {
