@@ -10,9 +10,8 @@ import com.example.coolchat.R
 
 class UserRecyclerAdapter(private val dataSet: ArrayList<User>) :
     RecyclerView.Adapter<UserRecyclerAdapter.ViewHolder>() {
-
     private lateinit var mListener : OnItemClickListener
-
+    
     interface OnItemClickListener{
         fun onItemClick(position: Int)
     }
@@ -46,6 +45,7 @@ class UserRecyclerAdapter(private val dataSet: ArrayList<User>) :
 
         holder.userImageView.setImageResource(dataSet[position].icon)
         holder.userNameTextView.text = dataSet[position].name
+
     }
 }
 

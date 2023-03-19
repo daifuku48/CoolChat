@@ -55,7 +55,9 @@ class UserListActivity : AppCompatActivity() {
         usersAdapter.setOnItemClickListener(object : UserRecyclerAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
                 val intent = Intent(this@UserListActivity, ChattingActivity::class.java).apply {
-                    putExtra("name", usersAdapter.getItemId(position) )
+                    putExtra("name", usersArrayList[position].name)
+                    putExtra("icon", usersArrayList[position].icon)
+                    putExtra("recipientId", usersArrayList[position].id)
                 }
                 startActivity(intent)
             }

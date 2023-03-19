@@ -34,17 +34,18 @@ import kotlin.collections.ArrayList
 
 class ChattingActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
-    var binding: ActivityChattingBinding? = null
+    private var binding: ActivityChattingBinding? = null
 
-    lateinit var adapter: MessageCustomAdapter
-    lateinit var database: FirebaseDatabase
-
-    lateinit var messagesDatabaseReference: DatabaseReference
-    lateinit var messageChildEventListener: ChildEventListener
-    lateinit var usersDatabaseReference: DatabaseReference
-    lateinit var usersChildEventListener: ChildEventListener
-    lateinit var storage: FirebaseStorage
-    lateinit var chatImageStorageReference: StorageReference
+    private lateinit var adapter: MessageCustomAdapter
+    private lateinit var database: FirebaseDatabase
+    private var recipientId = ""
+    private var recipientName = ""
+    private lateinit var messagesDatabaseReference: DatabaseReference
+    private lateinit var messageChildEventListener: ChildEventListener
+    private lateinit var usersDatabaseReference: DatabaseReference
+    private lateinit var usersChildEventListener: ChildEventListener
+    private lateinit var storage: FirebaseStorage
+    private lateinit var chatImageStorageReference: StorageReference
     private var username: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +53,10 @@ class ChattingActivity : AppCompatActivity() {
         setContentView(binding?.root)
         val intent: Intent? = intent
         username = intent?.getStringExtra("userName")
+        val intentRec = getIntent().apply {
+            recipientId = getStringExtra("recipientId").toString()
+            recipientName = getStringExtra("name").toString()
+        }
 
         auth = Firebase.auth
         database = Firebase.database
@@ -87,7 +92,8 @@ class ChattingActivity : AppCompatActivity() {
 
         binding?.messageButton?.setOnClickListener {
             val text = binding?.textOfMessageEditText?.text.toString()
-            val message = Message(text, username, "")
+
+            val message = Message(text, username, "", auth.currentUser?.uid.toString(), recipientId)
             messagesDatabaseReference.push().setValue(message)
             binding?.textOfMessageEditText?.text?.clear()
         }
@@ -100,7 +106,9 @@ class ChattingActivity : AppCompatActivity() {
         messageChildEventListener = object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val message = snapshot.getValue(Message::class.java)
-                adapter.add(message)
+                if ((message?.recipientId == recipientId && message.senderId == auth.currentUser?.uid.toString()) ||
+                    ((message?.recipientId == auth.currentUser?.uid.toString() && message.senderId == recipientId)))
+                    adapter.add(message)
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
@@ -145,43 +153,11 @@ class ChattingActivity : AppCompatActivity() {
             }
 
         }
+
         usersDatabaseReference.addChildEventListener(usersChildEventListener)
 
         messagesDatabaseReference.addChildEventListener(messageChildEventListener)
 
-
-//        val getImage = registerForActivityResult(ActivityResultContracts.GetContent()) { imageUri ->
-//            val storageReference = Firebase.storage.reference.child("chat_images/${UUID.randomUUID()}")
-//            if (imageUri != null) {
-//                Log.d("uri", "uri is not null")
-//                storageReference.putFile(imageUri).addOnSuccessListener { taskSnapshot ->
-//                    val imageUrl = taskSnapshot.metadata?.reference?.downloadUrl
-//                     Send the chat message with the image URL
-//                    val imageReference = imageUrl?.result?.lastPathSegment
-//                        ?.let { chatImageStorageReference.child(it)}
-//                    val uploadTask = imageReference?.putFile(imageUrl.result)
-//
-//                    val urlTask = uploadTask?.continueWithTask { task ->
-//                        if (!task.isSuccessful) {
-//                            task.exception?.let {
-//                                throw it
-//                            }
-//                        }
-//                        storageReference.downloadUrl
-//                    }?.addOnCompleteListener { task ->
-//                        if (task.isSuccessful) {
-//                            val downloadUri = task.result
-//                            val message = Message("", username, downloadUri.toString())
-//                            messagesDatabaseReference.push().setValue(message)
-//                        } else {
-//
-//                        }
-//                    }
-//                }.addOnFailureListener { exception ->
-//                     Handle the exception
-//                    Log.d("Failure", "Image has not sent")
-//                }
-//            }
 
         val getImage = registerForActivityResult(ActivityResultContracts.GetContent()) { imageUri ->
             val storageReference =
@@ -203,7 +179,7 @@ class ChattingActivity : AppCompatActivity() {
                         }.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 val downloadUri = task.result
-                                val message = Message("", username, downloadUri.toString())
+                                val message = Message("", username, downloadUri.toString(), auth.currentUser?.uid.toString(), recipientName)
                                 messagesDatabaseReference.push().setValue(message)
                             } else {
                                 // Handle the failure case

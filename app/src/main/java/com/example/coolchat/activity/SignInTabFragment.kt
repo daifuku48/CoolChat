@@ -19,6 +19,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.text.FieldPosition
 
 class SignInTabFragment : Fragment() {
 
@@ -64,6 +65,8 @@ class SignInTabFragment : Fragment() {
                     }
                 }
         }
+
+
 
         usersChildEventListener = object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?){
@@ -111,7 +114,7 @@ class SignInTabFragment : Fragment() {
         createUser(user)
         val intentToMainActivity = Intent(requireContext(), UserListActivity::class.java)
         intentToMainActivity.apply {
-            putExtra("userName", binding?.nameEditText?.text.toString())
+            putExtra("userName", user?.displayName)
         }
         startActivity(intentToMainActivity)
     }
