@@ -65,9 +65,8 @@ class ChattingActivity : AppCompatActivity() {
         messagesDatabaseReference = database.getReference("messages")
         usersDatabaseReference = database.getReference("users")
         chatImageStorageReference = storage.getReference("chat_images")
-        binding?.progressBarOfSending?.visibility = View.INVISIBLE
-        val listOfMessage = ArrayList<Message>()
-        adapter = MessageCustomAdapter(this, R.layout.item_message, listOfMessage)
+        val listOfMessage = ArrayList<Message?>()
+        adapter = MessageCustomAdapter(this, listOfMessage)
         binding?.messageListView?.adapter = adapter
         binding?.messageButton?.isEnabled = false
         binding?.textOfMessageEditText?.addTextChangedListener(object : TextWatcher {
@@ -93,7 +92,7 @@ class ChattingActivity : AppCompatActivity() {
         binding?.messageButton?.setOnClickListener {
             val text = binding?.textOfMessageEditText?.text.toString()
 
-            val message = Message(text, username, "", auth.currentUser?.uid.toString(), recipientId)
+            val message = Message(text,username , "", auth.currentUser?.uid.toString(), recipientId, false)
             messagesDatabaseReference.push().setValue(message)
             binding?.textOfMessageEditText?.text?.clear()
         }
@@ -101,14 +100,20 @@ class ChattingActivity : AppCompatActivity() {
         binding?.sendPhotoButton?.setOnClickListener {
 
         }
-
-
         messageChildEventListener = object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val message = snapshot.getValue(Message::class.java)
-                if ((message?.recipientId == recipientId && message.senderId == auth.currentUser?.uid.toString()) ||
-                    ((message?.recipientId == auth.currentUser?.uid.toString() && message.senderId == recipientId)))
+                if (message?.recipientId == recipientId && message.senderId == auth.currentUser?.uid.toString()){
+                    message.isLeft = false
                     adapter.add(message)
+                } else
+                {
+                    if ((message?.recipientId == auth.currentUser?.uid.toString() && message.senderId == recipientId))
+                    {
+                        message.isLeft = true
+                        adapter.add(message)
+                    }
+                }
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
@@ -179,7 +184,7 @@ class ChattingActivity : AppCompatActivity() {
                         }.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 val downloadUri = task.result
-                                val message = Message("", username, downloadUri.toString(), auth.currentUser?.uid.toString(), recipientName)
+                                val message = Message("", username, downloadUri.toString(), auth.currentUser?.uid.toString(), recipientName, false)
                                 messagesDatabaseReference.push().setValue(message)
                             } else {
                                 // Handle the failure case

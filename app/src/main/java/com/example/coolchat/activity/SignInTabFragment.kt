@@ -119,13 +119,10 @@ class SignInTabFragment : Fragment() {
         startActivity(intentToMainActivity)
     }
 
-    private fun createUser(user : FirebaseUser?)
-    {
+    private fun createUser(user : FirebaseUser?) {
         val userCreate = User(binding?.nameEditText?.text.toString(), user?.email.toString(), user?.uid.toString(), R.drawable.zoro)
         usersDatabaseReference.push().setValue(userCreate)
     }
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -7,14 +7,21 @@
     android:layout_height="match_parent"
     tools:context=".activity.ChattingActivity"
     tools:openDrawer = "start">
+
     <ListView
-        android:id = "@+id/messageListView"
-        android:transcriptMode = "alwaysScroll"
-        android:layout_width ="match_parent"
-        android:divider="@android:color/transparent"
-        tools:listitem="@layout/item_message"
+        android:id="@+id/messageListView"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_above = "@+id/sendMessageLinearLayout" />
+        android:layout_above="@+id/sendMessageLinearLayout"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="0dp"
+        android:divider="@android:color/transparent"
+        android:stackFromBottom="true"
+        android:dividerHeight="10.0sp"
+        android:transcriptMode="alwaysScroll"
+        tools:listitem="@layout/item_message_left" />
+
     <LinearLayout
         android:id = "@+id/sendMessageLinearLayout"
         android:layout_alignParentBottom="true"
@@ -29,25 +36,16 @@
             android:src="@drawable/baseline_image_24"/>
 
         <androidx.appcompat.widget.AppCompatEditText
-
             android:id = "@+id/textOfMessageEditText"
             android:layout_weight="1"
+            android:hint="Enter text"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="wrap_content"
             android:text = "send"
             android:layout_height="wrap_content"
             android:id = "@+id/messageButton"/>
-
-
     </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/progressBarOfSending"
-        android:layout_centerVertical ="true"
-        android:layout_centerHorizontal = "true"
-        android:layout_height = "wrap_content"
-        android:layout_width = "wrap_content" />
 </RelativeLayout>
