@@ -43,7 +43,7 @@ class UserRecyclerAdapter(private val dataSet: ArrayList<User>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        holder.userImageView.setImageResource(dataSet[position].icon)
+        holder.userImageView.setImageResource(R.drawable.zoro)
         holder.userNameTextView.text = dataSet[position].name
 
     }

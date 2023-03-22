@@ -1,6 +1,7 @@
 package com.example.coolchat.activity
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputFilter
@@ -10,6 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.coolchat.R
 import com.example.coolchat.databinding.ActivityChattingBinding
@@ -28,6 +30,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -47,6 +50,7 @@ class ChattingActivity : AppCompatActivity() {
     private lateinit var storage: FirebaseStorage
     private lateinit var chatImageStorageReference: StorageReference
     private var username: String? = null
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChattingBinding.inflate(layoutInflater)
@@ -91,15 +95,12 @@ class ChattingActivity : AppCompatActivity() {
 
         binding?.messageButton?.setOnClickListener {
             val text = binding?.textOfMessageEditText?.text.toString()
-
+            val time = LocalDateTime.now()
             val message = Message(text,username , "", auth.currentUser?.uid.toString(), recipientId, false)
             messagesDatabaseReference.push().setValue(message)
             binding?.textOfMessageEditText?.text?.clear()
         }
 
-        binding?.sendPhotoButton?.setOnClickListener {
-
-        }
         messageChildEventListener = object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val message = snapshot.getValue(Message::class.java)
@@ -184,7 +185,8 @@ class ChattingActivity : AppCompatActivity() {
                         }.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 val downloadUri = task.result
-                                val message = Message("", username, downloadUri.toString(), auth.currentUser?.uid.toString(), recipientName, false)
+                                val time = LocalDateTime.now()
+                                val message = Message("", username, downloadUri.toString(), auth.currentUser?.uid.toString(), recipientId, false)
                                 messagesDatabaseReference.push().setValue(message)
                             } else {
                                 // Handle the failure case
