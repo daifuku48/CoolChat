@@ -9,7 +9,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -20,19 +19,15 @@ import com.example.coolchat.model.MessageCustomAdapter
 import com.example.coolchat.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class ChattingActivity : AppCompatActivity() {
@@ -95,8 +90,7 @@ class ChattingActivity : AppCompatActivity() {
 
         binding?.messageButton?.setOnClickListener {
             val text = binding?.textOfMessageEditText?.text.toString()
-            val time = LocalDateTime.now()
-            val message = Message(text,username , "", auth.currentUser?.uid.toString(), recipientId, false)
+            val message = Message(text,username , "", auth.currentUser?.uid.toString(), recipientId, false, getTime())
             messagesDatabaseReference.push().setValue(message)
             binding?.textOfMessageEditText?.text?.clear()
         }
@@ -186,7 +180,7 @@ class ChattingActivity : AppCompatActivity() {
                             if (task.isSuccessful) {
                                 val downloadUri = task.result
                                 val time = LocalDateTime.now()
-                                val message = Message("", username, downloadUri.toString(), auth.currentUser?.uid.toString(), recipientId, false)
+                                val message = Message("", username, downloadUri.toString(), auth.currentUser?.uid.toString(), recipientId, false, getTime())
                                 messagesDatabaseReference.push().setValue(message)
                             } else {
                                 // Handle the failure case
@@ -206,12 +200,17 @@ class ChattingActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onDestroy() {
         super.onDestroy()
         binding = null
     }
 
+    private fun getTime() : String {
+        val currentLocale = resources.configuration.locale
+        val calendar = Calendar.getInstance()
+        val format = SimpleDateFormat("HH:mm", currentLocale)
+        return format.format(calendar.time).toString()
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater

@@ -39,6 +39,10 @@ class MessageCustomAdapter(private val context: Activity, private val listOfMess
                 imageViewOfMessage.visibility = View.VISIBLE
             }
         }
+        if (listOfMessage[position]?.time != null)
+        {
+            dataTimeTextView.text = listOfMessage[position]?.time
+        }
         return view
     }
 }

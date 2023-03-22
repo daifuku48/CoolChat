@@ -11,6 +11,7 @@ class Message(var text: String,
               var senderId: String,
               var recipientId: String,
               var isLeft: Boolean,
+              var time: String?
               ) {
-    constructor() : this("", "", "", "", "", false)
+    constructor() : this("", "", "", "", "", false, "")
 }
