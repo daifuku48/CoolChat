@@ -57,6 +57,7 @@ class ChattingActivity : AppCompatActivity() {
             recipientName = getStringExtra("name").toString()
         }
 
+        title = recipientName
         auth = Firebase.auth
         database = Firebase.database
         storage = Firebase.storage
@@ -198,6 +199,14 @@ class ChattingActivity : AppCompatActivity() {
         binding?.sendPhotoButton?.setOnClickListener {
             getImage.launch("image/*")
         }
+
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return true
     }
 
     override fun onDestroy() {
